@@ -5,8 +5,6 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 // Library and Framework
 import 'bootstrap/dist/css/bootstrap.css';
-import '@glidejs/glide/dist/css/glide.core.min.css';
-import '@glidejs/glide/dist/css/glide.theme.min.css';
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

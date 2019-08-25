@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Glide from '@glidejs/glide';
 
-export default class GlideSlider extends Component {
+import '@glidejs/glide/dist/css/glide.core.min.css';
+import '@glidejs/glide/dist/css/glide.theme.min.css';
+
+class GlideSlider extends Component {
 
 	constructor(props) {
 		super(props)
@@ -10,67 +13,17 @@ export default class GlideSlider extends Component {
 	}
 
 	componentDidMount(){
-    var Slider = new Glide('#' + this.props.id, {
-      type: 'slider',
-      width: 400,
-      autoheight: true,
-      startAt: 0,
-      autoplay: 2500,
-      breakpoints: {
-        576: {
-          perView: 1
-        },
-        768: {
-          perView: 2
-        },
-        992: { 
-          perView: 3
-        },
-        1200: { 
-          perView: 3
-        }
-      }
-    })
 
-    Slider.mount();
+		var Slider = new Glide('#' + this.props.id, this.props.options)
+
+		Slider.mount();
 
   }
 
   render() {
 		return (
 			<div className="glide" id={this.props.id}>
-        <div className="glide__track" data-glide-el="track">
-          <ul className="glide__slides">
-            <li className="glide__slide">
-              <div className="custom--slide">
-                My name is ...
-              </div>
-            </li>
-            <li className="glide__slide">1</li>
-            <li className="glide__slide">2</li>
-            <li className="glide__slide">3</li>
-            <li className="glide__slide">4</li>
-            <li className="glide__slide">5</li>
-            <li className="glide__slide">6</li>
-            <li className="glide__slide">7</li>
-            <li className="glide__slide">8</li>
-          </ul>
-        </div>
-        <div data-glide-el="controls">
-          <button className="glide__arrow glide__arrow--left" data-glide-dir="<">&larr;</button>
-          <button className="glide__arrow glide__arrow--right" data-glide-dir=">">&rarr;</button>
-        </div>
-        <div className="glide__bullets" data-glide-el="controls[nav]">
-          <button className="glide__bullet" data-glide-dir="=0"></button>
-          <button className="glide__bullet" data-glide-dir="=1"></button>
-          <button className="glide__bullet" data-glide-dir="=2"></button>
-          <button className="glide__bullet" data-glide-dir="=3"></button>
-          <button className="glide__bullet" data-glide-dir="=4"></button>
-          <button className="glide__bullet" data-glide-dir="=5"></button>
-          <button className="glide__bullet" data-glide-dir="=6"></button>
-          <button className="glide__bullet" data-glide-dir="=7"></button>
-          <button className="glide__bullet" data-glide-dir="=8"></button>
-        </div>
+				{this.props.children}
       </div>
 		);
 	}
@@ -78,5 +31,130 @@ export default class GlideSlider extends Component {
 }
 
 GlideSlider.propTypes = {
-	id: PropTypes.string.isRequired
+	id: PropTypes.string.isRequired,
+	children: PropTypes.element
+}
+
+// ################################
+
+class Controls extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+
+  render() {
+		return (
+			<div data-glide-el="controls">
+				<button className="glide__arrow glide__arrow--left" data-glide-dir="<">&larr;</button>
+				<button className="glide__arrow glide__arrow--right" data-glide-dir=">">&rarr;</button>
+			</div>
+		);
+	}
+
+}
+
+Controls.propTypes = {}
+
+// ################################
+
+class SliderContainer extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+
+  render() {
+		return (
+			<div className="glide__track" data-glide-el="track">
+				<ul className="glide__slides">
+					{this.props.children}
+				</ul>
+			</div>
+		);
+	}
+
+}
+
+SliderContainer.propTypes = {
+	children: PropTypes.element.isRequired
+}
+
+// ################################
+
+class SliderElement extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+
+  render() {
+		return (
+			<li className="glide__slide">
+				{this.props.children}
+			</li>
+		);
+	}
+
+}
+
+SliderElement.propTypes = {
+	children: PropTypes.element.isRequired
+}
+
+// ################################
+
+class Dots extends Component {
+
+	constructor(props) {
+		super(props)
+		this.state = {}
+	}
+
+	componentDidMount(){
+
+		function info(){
+
+      var container = document.getElementsByClassName("glide__slides")[0];
+      var element = container.getElementsByClassName("glide__slide").length;
+
+      var dotsContainer = document.getElementsByClassName("glide__bullets")[0];
+
+      for(var i = 0; i < element; i++){
+
+        var button = document.createElement("button");
+        button.setAttribute("class", "glide__bullet");
+        button.setAttribute("data-glide-dir", "=" + i);
+
+        dotsContainer.appendChild(button);
+
+      }
+      
+    }
+    
+    document.addEventListener("DOMContentLoaded", info);
+
+  }
+
+  render() {
+		return (
+      <div className="glide__bullets" data-glide-el="controls[nav]"></div>
+		);
+	}
+
+}
+
+Dots.propTypes = {}
+
+// ################################
+
+export {
+	GlideSlider,
+	Controls,
+	SliderContainer,
+  SliderElement,
+  Dots
 }
